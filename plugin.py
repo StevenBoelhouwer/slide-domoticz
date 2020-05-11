@@ -153,7 +153,7 @@ class iimSlide:
                             units.remove(device)
                         unit = min(units)
                         myDev = Domoticz.Device(Name=slide["device_name"], Unit=unit, DeviceID=str(
-                            slide["id"]), Type=244, Subtype=73, Switchtype=13, Used=1)
+                            slide["id"]), Type=244, Subtype=73, Switchtype=16, Used=1)
                         myDev.Create()
                         # in case device is offline then no pos info
                         if "pos" in slide["device_info"]:
@@ -199,12 +199,12 @@ class iimSlide:
     def setStatus(self, device, pos):
         sValue = str(int(pos*100))
         nValue = 2
-        if pos < 0.13:
-            nValue = 0
-            sValue = '0'
-        if pos > 0.87:
+        if pos < 0.1:
             nValue = 1
             sValue = '100'
+        if pos > 0.9:
+            nValue = 0
+            sValue = '0'
         if(device.sValue != sValue):
             device.Update(nValue=nValue, sValue=sValue)
             return True
@@ -215,11 +215,11 @@ class iimSlide:
         Domoticz.Debug("onCommand called for Unit " + str(Unit) +
                        ": Parameter '" + str(Command) + "', Level: " + str(Level))
         if (Command == 'Off'):
-            self.setPosition(Devices[Unit].DeviceID, 0)
-        if (Command == 'On'):
             self.setPosition(Devices[Unit].DeviceID, 1)
+        if (Command == 'On'):
+            self.setPosition(Devices[Unit].DeviceID, 0)
         if (Command == 'Set Level'):
-            self.setPosition(Devices[Unit].DeviceID, Level/100)
+            self.setPosition(Devices[Unit].DeviceID, 1-Level/100)
         if (Command == 'Stop'):
             self.slideStop(Devices[Unit].DeviceID, Level/100)
 

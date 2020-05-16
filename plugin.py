@@ -197,7 +197,7 @@ class iimSlide:
             self.messageQueue = {}
 
     def setStatus(self, device, pos):
-        sValue = str(int(pos*100))
+        sValue = str(int((1-pos)*100))
         nValue = 2
         if pos < 0.1:
             nValue = 1
